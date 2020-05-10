@@ -1,17 +1,24 @@
 import React from 'react'
-import Link from 'next/link'
-import Layout from '../components/Layout'
+import { getCurrentUser } from '../amplify'
 
-const AboutPage: React.FunctionComponent = () => (
-  <Layout title="About | Next.js + TypeScript Example">
-    <h1>About</h1>
-    <p>This is the about page</p>
-    <p>
-      <Link href="/">
-        <a>Go home</a>
-      </Link>
-    </p>
-  </Layout>
-)
+export default class AboutPage extends React.Component {
 
-export default AboutPage
+  state={
+    user:{ username: ''}
+  }
+
+  componentWillMount = () => {    
+    getCurrentUser().then(user => {
+      this.setState({user})
+    })
+      .catch(e => {
+        console.log("error:", e)
+      })
+  }
+
+  render() {
+    return (
+    <h1>hello user: {this.state.user?.username}</h1>
+    )
+  }
+}
